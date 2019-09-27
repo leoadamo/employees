@@ -37,8 +37,7 @@
       $query->execute($array);
       $result = $query->fecth();
 
-      if($result) return $result;
-      else return false;  
+      return $result ? $result : false;
     } catch (PDOException $e) {
       echo "Erro na busca:".$e->getMessage();
     }
