@@ -14,9 +14,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/functions.js"></script>
   </head>
 
-  <body>
+  <body onload="listarEmpregados()">
     <div class="container">
       <div class="table-wrapper">
         <div class="table-title">
@@ -47,22 +48,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <span class="custom-checkbox">
-                  <input type="checkbox" id="checkbox1" name="options[]" value="1" />
-                  <label for="checkbox1"></label>
-                </span>
-              </td>
-              <td>Thomas Hardy</td>
-              <td>thomashardy@mail.com</td>
-              <td>89 Chiaroscuro Rd, Portland, USA</td>
-              <td>(171) 555-2222</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-              </td>
-            </tr>
+            <!-- Conteúdo gerado na request com Axios vai aqui -->
           </tbody>
         </table>
         <div class="clearfix">
