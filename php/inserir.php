@@ -1,20 +1,24 @@
 <?php
   header('Access-Control-Allow-Methods: *');
   header('Access-Control-Allow-Origin: *');
+  header('Content-type:application/json');
 
   include('conecta.php');
 
-  $nome = $_POST['nome'];
-  $email = $_POST['email'];
-  $endereco = $_POST['endereco'];
-  $telefone = $_POST['telefone'];
+  $json = file_get_contents('php://input');
+  $data = json_decode($json);
 
-  $sql = "INSERT INTO funcionarios (nome, email, endereco, telefone) VALUES ('$nome', '$email', '$endereco', '$telefone')";
+  $nome = $data->nome;
+  $email = $data->email;
+  $endereco = $data->endereco;
+  $telefone = $data->telefone;
+  $array = array($nome, $email, $endereco, $telefone);
+
+  $sql = "INSERT INTO funcionarios (nome, email, endereco, telefone) VALUES (?, ?, ?, ?)";
 
   try {
     $query = $pdo->prepare($sql);
-    $result = $query->execute();
-  
+    $result = $query->execute($array);
   } catch (PDOException $e) {
     echo "Erro na inserção:".$e->getMessage();
   }

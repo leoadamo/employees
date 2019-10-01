@@ -57,3 +57,26 @@ function msgnErro(error) {
 function excluiEmpregados() {
 	let data = {};
 }
+
+function insereEmpregados(){
+	const nome = $('#nome').val();
+	const email = $('#email').val();
+	const endereco = $('#endereco').val();
+	const telefone = $('#telefone').val();
+
+	let empregado = JSON.stringify({nome, email, endereco, telefone});
+	console.log(empregado);
+	axios
+		.post ('http://localhost/projects/employees/php/inserir.php', empregado)
+		.then(function(response) {
+			if (response) {
+				$('.formularioInsere').each (function() {
+					this.reset();
+				});
+				listarEmpregados();
+			}
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
+}
