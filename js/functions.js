@@ -67,19 +67,19 @@ function excluiEmpregados(event) {
 		});
 }
 
-function insereEmpregados(){
+function insereEmpregados() {
 	const nome = $('#nome').val();
 	const email = $('#email').val();
 	const endereco = $('#endereco').val();
 	const telefone = $('#telefone').val();
 
-	let empregado = JSON.stringify({nome, email, endereco, telefone});
+	let empregado = JSON.stringify({ nome, email, endereco, telefone });
 	console.log(empregado);
 	axios
-		.post ('http://localhost/projects/employees/php/inserir.php', empregado)
+		.post('http://localhost/projects/employees/php/inserir.php', empregado)
 		.then(function(response) {
 			if (response) {
-				$('.formularioInsere').each (function() {
+				$('.formularioInsere').each(function() {
 					this.reset();
 				});
 				listarEmpregados();
