@@ -37,8 +37,12 @@ function montaEmpregados(response) {
 				element.telefone +
 				'</td>' +
 				'<td>' +
-				'<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
-				'<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
+				'<a value="' +
+				element.id +
+				'" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
+				'<a value="' +
+				element.id +
+				'" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
 				'</td>' +
 				'</tr>'
 		);
@@ -48,4 +52,8 @@ function montaEmpregados(response) {
 
 function msgnErro(error) {
 	return '<td>' + error + '</td>';
+}
+
+function excluiEmpregados() {
+	let data = {};
 }
