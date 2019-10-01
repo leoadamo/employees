@@ -40,9 +40,9 @@ function montaEmpregados(response) {
 				'<a value="' +
 				element.id +
 				'" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
-				'<a value="' +
+				'<a onclick="excluiEmpregados(event)" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" id="' +
 				element.id +
-				'" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
+				'" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
 				'</td>' +
 				'</tr>'
 		);
@@ -54,6 +54,15 @@ function msgnErro(error) {
 	return '<td>' + error + '</td>';
 }
 
-function excluiEmpregados() {
-	let data = {};
+function excluiEmpregados(event) {
+	let id = JSON.stringify(event.target.id);
+
+	axios
+		.post('http://localhost/projects/employees/php/deletar.php', id)
+		.then(function(response) {
+			return response ? listarEmpregados() : false;
+		})
+		.catch(function(error) {
+			console.log('Erro:' + error);
+		});
 }
