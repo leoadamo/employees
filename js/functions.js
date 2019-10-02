@@ -39,7 +39,7 @@ function montaEmpregados(response) {
 				'<td>' +
 				'<a onclick = "modalEdita(event)" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" id="' +
 				element.id +
-				'" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
+				'"<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
 				'<a onclick="modalExclui(' +
 				element.id +
 				')" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
