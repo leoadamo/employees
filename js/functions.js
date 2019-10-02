@@ -37,9 +37,9 @@ function montaEmpregados(response) {
 				element.telefone +
 				'</td>' +
 				'<td>' +
-				'<a value="' +
+				'<a onclick = "modalEdita(event)" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" id="' +
 				element.id +
-				'" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
+				'"data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
 				'<a onclick="excluiEmpregados(event)" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" id="' +
 				element.id +
 				'" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
@@ -87,4 +87,48 @@ function insereEmpregados() {
 		.catch(function(error) {
 			console.log(error);
 		});
+}
+
+function modalEdita(event){
+	let id = event.target.id;
+	let $target = $('#editEmployeeModal');
+	
+	let html = 
+		'<div class="modal-dialog">' +
+			'<div class="modal-content">' +
+				'<form>' +
+					'<div class="modal-header">' +
+						'<h4 class="modal-title">Editar Empregado</h4>' +
+						'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+					'</div>' +
+					'<div class="modal-body">' +
+						'<div class="form-group">' +
+							'<label>Nome</label>' +
+							'<input type="text" class="form-control" required />' +
+						'</div>' +
+						'<div class="form-group">' +
+							'<label>Email</label>' +
+							'<input type="email" class="form-control" required />' +
+						'</div>' +
+						'<div class="form-group">' +
+							'<label>Endereço</label>' +
+							'<textarea class="form-control" required></textarea>' +
+						'</div>' +
+						'<div class="form-group">' +
+							'<label>Telefone</label>' +
+							'<input type="text" class="form-control" required />' +
+						'</div>' +
+					'</div>' +
+					'<div class="modal-footer">' +
+						'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
+						'<input type="submit" class="btn btn-info" value="Salvar" id="' + id + '"/>' +
+					'</div>' +
+				'</form>' +
+			'</div>' +
+		'</div>';
+
+		$target.html(html);
+}
+
+function editaEmpregados() {
 }
