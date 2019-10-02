@@ -72,13 +72,12 @@ function insereEmpregados() {
 	const email = $('#email').val();
 	const endereco = $('#endereco').val();
 	const telefone = $('#telefone').val();
+	const empregado = JSON.stringify({ nome, email, endereco, telefone });
 
-	let empregado = JSON.stringify({ nome, email, endereco, telefone });
-	console.log(empregado);
 	axios
 		.post('http://localhost/projects/employees/php/inserir.php', empregado)
 		.then(function(response) {
-			if (response) {
+			if (response.status === 200) {
 				$('.formularioInsere').each(function() {
 					this.reset();
 				});

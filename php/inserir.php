@@ -18,8 +18,7 @@
 
   try {
     $query = $pdo->prepare($sql);
-    $result = $query->execute($array);
-    return $result;
+    $query->execute($array);
   } catch (PDOException $e) {
     echo "Erro na inserção:".$e->getMessage();
   }
