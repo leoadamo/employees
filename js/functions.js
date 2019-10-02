@@ -40,9 +40,9 @@ function montaEmpregados(response) {
 				'<a value="' +
 				element.id +
 				'" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
-				'<a onclick="excluiEmpregados(event)" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" id="' +
+				'<a onclick="modalExclui(' +
 				element.id +
-				'" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
+				')" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
 				'</td>' +
 				'</tr>'
 		);
@@ -54,16 +54,45 @@ function msgnErro(error) {
 	return '<td>' + error + '</td>';
 }
 
-function excluiEmpregados(event) {
-	let id = JSON.stringify(event.target.id);
+function modalExclui(id) {
+	let $target = $('#deleteEmployeeModal');
+	html =
+		'<div class="modal-dialog">' +
+		'<div class="modal-content">' +
+		'<form class="formularioInsere">' +
+		'<div class="modal-header">' +
+		'<h4 class="modal-title">Deletar Registro</h4>' +
+		'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+		'</div>' +
+		'<div class="modal-body">' +
+		'<p>Você está certo de que deseja excluir o funcionário?</p>' +
+		'<p class="text-warning"><small>Esta ação não poderá ser desfeita.</small></p>' +
+		'</div>' +
+		'<div class="modal-footer">' +
+		'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />' +
+		'<input onclick="excluiEmpregados(' +
+		id +
+		')" type="submit" class="btn btn-danger" value="Delete" />' +
+		'</div>' +
+		'</form>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$target.html(html);
+}
+
+function excluiEmpregados(id) {
+	let key = JSON.stringify(id);
 
 	axios
-		.post('http://localhost/projects/employees/php/deletar.php', id)
+		.post('http://localhost/projects/employees/php/deletar.php', key)
 		.then(function(response) {
-			return response ? listarEmpregados() : false;
+			if (response.status === 200) listarEmpregados();
+			else return false;
 		})
 		.catch(function(error) {
-			console.log('Erro:' + error);
+			console.log('Erro na Requisição: ' + error);
 		});
 }
 
@@ -85,6 +114,6 @@ function insereEmpregados() {
 			}
 		})
 		.catch(function(error) {
-			console.log(error);
+			console.log('Erro na Requisição: ' + error);
 		});
 }
