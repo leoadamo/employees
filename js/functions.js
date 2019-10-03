@@ -150,6 +150,25 @@ function buscaEmpregado(id) {
 		})
 }
 
+function editaEmpregados(id) {
+	const nome = $('#nomeEdita').val();
+	const email = $('#emailEdita').val();
+	const endereco = $('#enderecoEdita').val();
+	const telefone = $('#telefoneEdita').val();
+	let empregado = JSON.stringify({ nome, email, endereco, telefone, id });
+
+	axios
+		.post('http://localhost/projects/employees/php/editar.php', empregado)
+		.then(function (response) {
+			if (response.status === 200) {
+				listarEmpregados();
+			}
+		})
+		.catch(function (error) {
+			console.log('Erro na Requisição: ' + error);
+		});
+}
+
 function modalEdita(response) {
 	let $target = $('#editEmployeeModal');
 	let html = [];
@@ -165,26 +184,26 @@ function modalEdita(response) {
 			'<div class="modal-body">' +
 			'<div class="form-group">' +
 			'<label>Nome</label>' +
-			'<input type="text" class="form-control" required value="' + element.nome + '" />' +
+			'<input type="text" class="form-control" required id="nomeEdita" value="' + element.nome + '" />' +
 			'</div>' +
 			'<div class="form-group">' +
 			'<label>Email</label>' +
-			'<input type="email" class="form-control" required value="' + element.email + '"/>' +
+			'<input type="email" class="form-control" required id="emailEdita" value="' + element.email + '"/>' +
 			'</div>' +
 			'<div class="form-group">' +
 			'<label>Endereço</label>' +
-			'<textarea class="form-control" required value="' + element.endereco + '"></textarea>' +
+			'<textarea class="form-control" required id="enderecoEdita" value="' + element.endereco + '"></textarea>' +
 			'</div>' +
 			'<div class="form-group">' +
 			'<label>Telefone</label>' +
-			'<input type="text" class="form-control" required value="' + element.telefone + '"/>' +
+			'<input type="text" class="form-control" required id="telefoneEdita" value="' + element.telefone + '"/>' +
 			'</div>' +
 			'</div>' +
 			'<div class="modal-footer">' +
 			'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
 			'<input type="submit" class="btn btn-info" value="Salvar" onclick="editaEmpregados(' +
 			element.id +
-			')"/>' +
+			', event)"/>' +
 			'</div>' +
 			'</form>' +
 			'</div>' +
