@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="css/main.css" />
 	</head>
 
-	<body onload="listarEmpregados()">
+	<body>
 		<div class="container">
 			<div class="table-wrapper">
 				<div class="table-title">
@@ -59,25 +59,25 @@
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
-								<label>Nome</label>
-								<input type="text" class="form-control" required id="nome" />
+								<label for="nome">Nome</label>
+								<input type="text" name="nome" class="form-control" required id="nome" />
 							</div>
 							<div class="form-group">
 								<label>Email</label>
-								<input type="email" class="form-control" required id="email" />
+								<input type="email" name="email" class="form-control" required id="email" />
 							</div>
 							<div class="form-group">
 								<label>Endereço</label>
-								<textarea class="form-control" required id="endereco"></textarea>
+								<textarea class="form-control" name="endereco" required id="endereco"></textarea>
 							</div>
 							<div class="form-group">
 								<label>Telefone</label>
-								<input type="text" class="form-control" required id="telefone" />
+								<input type="text" name="telefone" class="form-control" required id="telefone" />
 							</div>
 						</div>
 						<div class="modal-footer">
 							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />
-							<input type="submit" class="btn btn-success" value="Adicionar" onclick="insereEmpregados(event)" />
+							<input type="submit" class="btn btn-success btn-insert-employee" value="Adicionar" />
 						</div>
 					</form>
 				</div>
