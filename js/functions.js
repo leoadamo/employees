@@ -145,50 +145,52 @@ function buscaEmpregado(id) {
 		.post('http://localhost/projects/employees/php/buscar.php', busca)
 		.then(function (response) {
 			if (response.status === 200) {
-				let dados = response.data;
-				modalEdita(dados);
+				modalEdita(response.data);
 			} else return false;
 		})
 }
 
-function modalEdita() {
+function modalEdita(response) {
 	let $target = $('#editEmployeeModal');
+	let html = [];
+	response.forEach(element => {
+		html.push(
+			'<div class="modal-dialog">' +
+			'<div class="modal-content">' +
+			'<form>' +
+			'<div class="modal-header">' +
+			'<h4 class="modal-title">Editar Empregado</h4>' +
+			'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+			'</div>' +
+			'<div class="modal-body">' +
+			'<div class="form-group">' +
+			'<label>Nome</label>' +
+			'<input type="text" class="form-control" required value="' + element.nome + '" />' +
+			'</div>' +
+			'<div class="form-group">' +
+			'<label>Email</label>' +
+			'<input type="email" class="form-control" required value="' + element.email + '"/>' +
+			'</div>' +
+			'<div class="form-group">' +
+			'<label>Endereço</label>' +
+			'<textarea class="form-control" required value="' + element.endereco + '"></textarea>' +
+			'</div>' +
+			'<div class="form-group">' +
+			'<label>Telefone</label>' +
+			'<input type="text" class="form-control" required value="' + element.telefone + '"/>' +
+			'</div>' +
+			'</div>' +
+			'<div class="modal-footer">' +
+			'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
+			'<input type="submit" class="btn btn-info" value="Salvar" onclick="editaEmpregados(' +
+			element.id +
+			')"/>' +
+			'</div>' +
+			'</form>' +
+			'</div>' +
+			'</div>'
+		);
 
-	let html =
-		'<div class="modal-dialog">' +
-		'<div class="modal-content">' +
-		'<form>' +
-		'<div class="modal-header">' +
-		'<h4 class="modal-title">Editar Empregado</h4>' +
-		'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-		'</div>' +
-		'<div class="modal-body">' +
-		'<div class="form-group">' +
-		'<label>Nome</label>' +
-		'<input type="text" class="form-control" required />' +
-		'</div>' +
-		'<div class="form-group">' +
-		'<label>Email</label>' +
-		'<input type="email" class="form-control" required />' +
-		'</div>' +
-		'<div class="form-group">' +
-		'<label>Endereço</label>' +
-		'<textarea class="form-control" required></textarea>' +
-		'</div>' +
-		'<div class="form-group">' +
-		'<label>Telefone</label>' +
-		'<input type="text" class="form-control" required />' +
-		'</div>' +
-		'</div>' +
-		'<div class="modal-footer">' +
-		'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
-		'<input type="submit" class="btn btn-info" value="Salvar" id="' +
-		id +
-		'"/>' +
-		'</div>' +
-		'</form>' +
-		'</div>' +
-		'</div>';
-
-	$target.html(html);
+		$target.html(html);
+	})
 }
