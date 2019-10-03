@@ -1,17 +1,23 @@
 <?php
   header('Access-Control-Allow-Methods: *');
   header('Access-Control-Allow-Origin: *');
+  header('Content-type:application/json');
   
   include('conecta.php');
 
-  $id = $_POST['id'];
-  $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
+  $json = file_get_contents('php://input');
+  $data = json_decode($json);
+  $array = array($data);
+
+  $sql = "SELECT * FROM funcionarios WHERE id = ?";
 
   try {
     $query = $pdo->prepare($sql);
-    $query->execute();
-    $result = $query->fecth();
+    $result = $query->execute($array);
+    $result = array();
 
+    $info = $query->fetch(PDO::FETCH_ASSOC);
+    array_push($result, $info);
     echo(json_encode($result));
 
   } catch (PDOException $e) {

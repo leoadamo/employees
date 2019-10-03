@@ -4,10 +4,10 @@ function listarEmpregados() {
 
 	axios
 		.get('http://localhost/projects/employees/php/listar.php')
-		.then(function(response) {
+		.then(function (response) {
 			$target.html(montaEmpregados(response.data));
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			$target.html(msgnErro(error));
 		});
 }
@@ -18,33 +18,33 @@ function montaEmpregados(response) {
 	response.forEach(element => {
 		html.push(
 			'<tr>' +
-				'<td>' +
-				'<span class="custom-checkbox">' +
-				'<input type="checkbox" id "checkbox1" name="options[]" value="1" />' +
-				'<label for="checkbox1"></label>' +
-				'</span>' +
-				'</td>' +
-				'<td>' +
-				element.nome +
-				'</td>' +
-				'<td>' +
-				element.email +
-				'</td>' +
-				'<td>' +
-				element.endereco +
-				'</td>' +
-				'<td>' +
-				element.telefone +
-				'</td>' +
-				'<td>' +
-				'<a onclick = "modalEdita(event)" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" id="' +
-				element.id +
-				'"<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
-				'<a onclick="modalExclui(' +
-				element.id +
-				')" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
-				'</td>' +
-				'</tr>'
+			'<td>' +
+			'<span class="custom-checkbox">' +
+			'<input type="checkbox" id "checkbox1" name="options[]" value="1" />' +
+			'<label for="checkbox1"></label>' +
+			'</span>' +
+			'</td>' +
+			'<td>' +
+			element.nome +
+			'</td>' +
+			'<td>' +
+			element.email +
+			'</td>' +
+			'<td>' +
+			element.endereco +
+			'</td>' +
+			'<td>' +
+			element.telefone +
+			'</td>' +
+			'<td>' +
+			'<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" onclick="buscaEmpregado (' +
+			element.id +
+			')"<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>' +
+			'<a onclick="modalExclui(' +
+			element.id +
+			')" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>' +
+			'</td>' +
+			'</tr>'
 		);
 	});
 	return html;
@@ -93,7 +93,7 @@ function excluiEmpregados(id, event) {
 
 	axios
 		.post('http://localhost/projects/employees/php/deletar.php', key)
-		.then(function(response) {
+		.then(function (response) {
 			if (response.status === 200) {
 				listarEmpregados();
 				$body.removeClass('modal-open');
@@ -102,7 +102,7 @@ function excluiEmpregados(id, event) {
 				$overlay.remove();
 			} else return false;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			console.log('Erro na Requisição: ' + error);
 		});
 }
@@ -121,9 +121,9 @@ function insereEmpregados(event) {
 
 	axios
 		.post('http://localhost/projects/employees/php/inserir.php', empregado)
-		.then(function(response) {
+		.then(function (response) {
 			if (response.status === 200) {
-				$('.formularioInsere').each(function() {
+				$('.formularioInsere').each(function () {
 					this.reset();
 				});
 				listarEmpregados();
@@ -133,13 +133,25 @@ function insereEmpregados(event) {
 				$overlay.remove();
 			}
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			console.log('Erro na Requisição: ' + error);
 		});
 }
 
-function modalEdita(event) {
-	let id = event.target.id;
+function buscaEmpregado(id) {
+	let busca = JSON.stringify(id);
+
+	axios
+		.post('http://localhost/projects/employees/php/buscar.php', busca)
+		.then(function (response) {
+			if (response.status === 200) {
+				let dados = response.data;
+				modalEdita(dados);
+			} else return false;
+		})
+}
+
+function modalEdita() {
 	let $target = $('#editEmployeeModal');
 
 	let html =
