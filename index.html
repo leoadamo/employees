@@ -48,7 +48,7 @@
 				</table>
 			</div>
 		</div>
-		<!-- Edit Modal HTML -->
+		<!-- Add Modal HTML -->
 		<div id="addEmployeeModal" class="modal fade">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -77,14 +77,16 @@
 						</div>
 						<div class="modal-footer">
 							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />
-							<input type="submit" class="btn btn-success" value="Adicionar" onclick="insereEmpregados()" />
+							<input type="submit" class="btn btn-success" value="Adicionar" onclick="insereEmpregados(event)" />
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 		<!-- Edit Modal HTML -->
-		<div id="editEmployeeModal" class="modal fade"></div>
+		<div id="editEmployeeModal" class="modal fade">
+			<!-- HTML tags will be placed here by JS -->
+		</div>
 		<!-- Delete Modal HTML -->
 		<div id="deleteEmployeeModal" class="modal fade">
 			<!-- HTML tags will be placed here by JS -->
