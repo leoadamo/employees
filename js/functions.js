@@ -5,9 +5,7 @@ $(() => {
 			Main.bind.call();
 		},
 		cache: {
-			tableWrapper: $('.table-wrapper'),
 			table: $('.table'),
-			modal: $('modal-content'),
 			server: 'http://localhost/projects/employees/php/'
 		},
 		bind: () => {
@@ -15,19 +13,19 @@ $(() => {
 				let edit = $(this).data('id');
 				Main.functions.buscaEmpregado(edit);
 			});
-			Main.cache.table.on('click', '.delete-employee', () => {
-				let id = $(this).data('data-id');
-				console.log(id);
-				// Main.functions.modalExclui(id);
+
+			Main.cache.table.on('click', '.delete-employee', function() {
+				let id = $(this).data('id');
+				Main.functions.modalExclui(id);
+				$('#delForm').on('click', '.btn-danger', function(e) {
+					e.preventDefault();
+					let key = $(this).data('id');
+					Main.functions.excluiEmpregados(key);
+				});
 			});
-			Main.cache.tableWrapper.on('click', '.btn-insert-employee', e => {
+
+			$('.modal-footer').on('click', '.btn-insert-employee', e => {
 				Main.functions.insereEmpregados(e);
-			});
-			Main.cache.modal.on('click', '.btn-danger', e => {
-				e.preventDefault();
-				// let key = $(this).data('id');
-				// Main.functions.excluiEmpregados(key, event);
-				console.log('oi');
 			});
 		},
 		functions: {
@@ -72,7 +70,7 @@ $(() => {
 				const $target = $('#deleteEmployeeModal');
 				let html = `<div class="modal-dialog">
 					 		<div class="modal-content">
-								<form class="formularioInsere">
+								<form id="delForm">
 									<div class="modal-header">
 										<h4 class="modal-title">Deletar Registro</h4>
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -91,23 +89,21 @@ $(() => {
 					</div>`;
 				$target.html(html);
 			},
-			excluiEmpregados: (id, event) => {
-				event.preventDefault();
-				// const $target = $('#deleteEmployeeModal');
+			excluiEmpregados: id => {
+				const $target = $('#deleteEmployeeModal');
 				let key = JSON.stringify(id);
-				console.log(key);
 
-				// axios
-				// 	.post(Main.cache.server + 'deletar.php', key)
-				// 	.then(function(response) {
-				// 		if (response.status === 200) {
-				// 			$target.modal('toggle');
-				// 			listarEmpregados();
-				// 		} else return false;
-				// 	})
-				// 	.catch(function(error) {
-				// 		console.log('Erro na Requisição: ' + error);
-				// 	});
+				axios
+					.post(Main.cache.server + 'deletar.php', key)
+					.then(function(response) {
+						if (response.status === 200) {
+							$target.modal('toggle');
+							Main.functions.listarEmpregados();
+						} else return false;
+					})
+					.catch(function(error) {
+						console.log('Erro na Requisição: ' + error);
+					});
 			},
 			buscaEmpregado: id => {
 				let busca = JSON.stringify(id);
@@ -128,7 +124,7 @@ $(() => {
 					html.push(
 						'<div class="modal-dialog">' +
 							'<div class="modal-content">' +
-							'<form>' +
+							'<form class="form">' +
 							'<div class="modal-header">' +
 							'<h4 class="modal-title">Editar Empregado</h4>' +
 							'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
@@ -161,9 +157,7 @@ $(() => {
 							'</div>' +
 							'<div class="modal-footer">' +
 							'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
-							'<input type="submit" class="btn btn-info" value="Salvar" onclick="editaEmpregados(' +
-							element.id +
-							')"/>' +
+							'<input type="submit" class="btn btn-info" value="Salvar" />' +
 							'</div>' +
 							'</form>' +
 							'</div>' +
@@ -175,20 +169,23 @@ $(() => {
 			insereEmpregados: event => {
 				event.preventDefault();
 				const $target = $('#addEmployeeModal');
-				const nome = $('#nome').val();
-				const email = $('#email').val();
-				const endereco = $('#endereco').val();
-				const telefone = $('#telefone').val();
-				let empregado = JSON.stringify({ nome, email, endereco, telefone });
+				const $addForm = $('#addForm');
+				let empregados = $addForm.serializeArray();
+				let data = {};
+
+				$(empregados).each((i, obj) => {
+					data[obj.name] = obj.value;
+				});
+
 				axios
-					.post('http://localhost/projects/employees/php/inserir.php', empregado)
+					.post(Main.cache.server + 'inserir.php', data)
 					.then(response => {
 						if (response.status === 200) {
-							$('.formularioInsere').each(() => {
+							$target.modal('toggle');
+							Main.functions.listarEmpregados();
+							$addForm.each(function() {
 								this.reset();
 							});
-							$target.modal('toggle');
-							listarEmpregados();
 						}
 					})
 					.catch(function(error) {
