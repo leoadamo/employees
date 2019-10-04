@@ -9,6 +9,10 @@ $(() => {
 			server: 'http://localhost/projects/employees/php/'
 		},
 		bind: () => {
+			$('.modal-footer').on('click', '.btn-insert-employee', e => {
+				Main.functions.insereEmpregados(e);
+			});
+
 			Main.cache.table.on('click', '.edit', () => {
 				let edit = $(this).data('id');
 				Main.functions.buscaEmpregado(edit);
@@ -22,10 +26,6 @@ $(() => {
 					let key = $(this).data('id');
 					Main.functions.excluiEmpregados(key);
 				});
-			});
-
-			$('.modal-footer').on('click', '.btn-insert-employee', e => {
-				Main.functions.insereEmpregados(e);
 			});
 		},
 		functions: {
@@ -67,27 +67,10 @@ $(() => {
 				return html;
 			},
 			modalExclui: id => {
-				const $target = $('#deleteEmployeeModal');
-				let html = `<div class="modal-dialog">
-					 		<div class="modal-content">
-								<form id="delForm">
-									<div class="modal-header">
-										<h4 class="modal-title">Deletar Registro</h4>
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									</div>
-									<div class="modal-body">
-										<p>Você está certo de que deseja excluir o funcionário?</p>
-										<p class="text-warning"><small>Esta ação não poderá ser desfeita.</small></p>
-									</div>
-									<div class="modal-footer">
-										<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
-										<input type="submit" class="btn btn-danger" value="Delete" data-id="${id}"/>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>`;
-				$target.html(html);
+				const $target = $('#deleteEmployeeModal .modal-footer');
+				let html = `<input type="submit" class="btn btn-danger" value="Delete" data-id="${id}"/>`;
+
+				$target.append(html);
 			},
 			excluiEmpregados: id => {
 				const $target = $('#deleteEmployeeModal');
