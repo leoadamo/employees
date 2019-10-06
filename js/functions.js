@@ -13,7 +13,7 @@ $(() => {
 				Main.functions.insereEmpregados(e);
 			});
 
-			Main.cache.table.on('click', '.edit', () => {
+			Main.cache.table.on('click', '.edit-employee', function() {
 				let edit = $(this).data('id');
 				Main.functions.buscaEmpregado(edit);
 			});
@@ -62,7 +62,7 @@ $(() => {
 						<td>${element.endereco}</td>
 						<td>${element.telefone}</td>
 						<td>
-						<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-id="${element.id}"<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+						<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons edit-employee" data-id="${element.id}" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 						<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons delete-employee" data-id="${element.id}" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						</td>
 						</tr>`
@@ -97,60 +97,58 @@ $(() => {
 			buscaEmpregado: id => {
 				let busca = JSON.stringify(id);
 
-				axios.post(Main.cache.server + 'buscar.php', busca).then(response => {
-					if (response.status === 200) {
-						Main.functions.modalEdita(response.data);
-					} else return false;
+				$.ajax({
+					type: 'POST',
+					url: Main.cache.server + 'buscar.php',
+					data: busca,
+					dataType: 'json',
+					success: response => {
+						Main.functions.modalEdita(response);
+					},
+					error: (xhr, thrownError) => {
+						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
+						console.log(`Erro: ${thrownError}`);
+					}
 				});
-			},
-			msgnErro: error => {
-				return '<td>' + error + '</td>';
 			},
 			modalEdita: response => {
 				let $target = $('#editEmployeeModal');
 				let html = [];
-				response.forEach(element => {
+
+				$.each(response, (i, element) => {
 					html.push(
-						'<div class="modal-dialog">' +
-							'<div class="modal-content">' +
-							'<form class="form">' +
-							'<div class="modal-header">' +
-							'<h4 class="modal-title">Editar Empregado</h4>' +
-							'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-							'</div>' +
-							'<div class="modal-body">' +
-							'<div class="form-group">' +
-							'<label>Nome</label>' +
-							'<input type="text" class="form-control" required value="' +
-							element.nome +
-							'" />' +
-							'</div>' +
-							'<div class="form-group">' +
-							'<label>Email</label>' +
-							'<input type="email" class="form-control" required value="' +
-							element.email +
-							'"/>' +
-							'</div>' +
-							'<div class="form-group">' +
-							'<label>Endereço</label>' +
-							'<textarea class="form-control" required value="' +
-							element.endereco +
-							'"></textarea>' +
-							'</div>' +
-							'<div class="form-group">' +
-							'<label>Telefone</label>' +
-							'<input type="text" class="form-control" required value="' +
-							element.telefone +
-							'"/>' +
-							'</div>' +
-							'</div>' +
-							'<div class="modal-footer">' +
-							'<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />' +
-							'<input type="submit" class="btn btn-info" value="Salvar" />' +
-							'</div>' +
-							'</form>' +
-							'</div>' +
-							'</div>'
+						`<div class="modal-dialog">
+							<div class="modal-content">
+								<form class="form">
+									<div class="modal-header">
+										<h4 class="modal-title">Editar Empregado</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									</div>
+									<div class="modal-body">
+										<div class="form-group">
+											<label>Nome</label>
+											<input type="text" class="form-control" required value="${element.nome}" />
+										</div>
+										<div class="form-group">
+											<label>Email</label>
+											<input type="email" class="form-control" required value="${element.email}"/>
+										</div>
+										<div class="form-group">
+											<label>Endereço</label>
+											<input class="form-control" required value="${element.endereco}" />
+										</div>
+										<div class="form-group">
+											<label>Telefone</label>
+											<input type="text" class="form-control" required value="${element.telefone}"/>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />
+										<input type="submit" class="btn btn-info" value="Salvar" />
+									</div>
+								</form>
+							</div>
+						</div>`
 					);
 					$target.html(html);
 				});
@@ -183,6 +181,9 @@ $(() => {
 						console.log(`Erro: ${thrownError}`);
 					}
 				});
+			},
+			msgnErro: error => {
+				return '<td>' + error + '</td>';
 			}
 		}
 	};
