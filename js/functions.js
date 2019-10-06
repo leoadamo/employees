@@ -33,18 +33,22 @@ $(() => {
 				const $target = Main.cache.table.find('tbody');
 				$target.html('');
 
-				axios
-					.get(Main.cache.server + 'listar.php')
-					.then(response => {
-						$target.html(Main.functions.montaEmpregados(response.data));
-					})
-					.catch(error => {
-						$target.html(Main.functions.msgnErro(error));
-					});
+				$.ajax({
+					type: 'GET',
+					url: Main.cache.server + 'listar.php',
+					dataType: 'json',
+					success: response => {
+						$target.html(Main.functions.montaEmpregados(response));
+					},
+					error: (xhr, thrownError) => {
+						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
+						console.log(`Erro: ${thrownError}`);
+					}
+				});
 			},
 			montaEmpregados: response => {
 				let html = [];
-				response.forEach(element => {
+				$.each(response, (i, element) => {
 					html.push(
 						`<tr>
 						<td>
@@ -67,26 +71,28 @@ $(() => {
 				return html;
 			},
 			modalExclui: id => {
-				const $target = $('#deleteEmployeeModal .modal-footer');
-				let html = `<input type="submit" class="btn btn-danger" value="Delete" data-id="${id}"/>`;
+				const $target = $('#deleteEmployeeModal .btn-danger');
 
-				$target.append(html);
+				$target.attr('data-id', id);
 			},
 			excluiEmpregados: id => {
 				const $target = $('#deleteEmployeeModal');
 				let key = JSON.stringify(id);
 
-				axios
-					.post(Main.cache.server + 'deletar.php', key)
-					.then(function(response) {
-						if (response.status === 200) {
-							$target.modal('toggle');
-							Main.functions.listarEmpregados();
-						} else return false;
-					})
-					.catch(function(error) {
-						console.log('Erro na Requisição: ' + error);
-					});
+				$.ajax({
+					type: 'POST',
+					url: Main.cache.server + 'deletar.php',
+					data: key,
+					contentType: 'application/json; charset=utf-8;',
+					success: () => {
+						$target.modal('toggle');
+						Main.functions.listarEmpregados();
+					},
+					error: (xhr, thrownError) => {
+						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
+						console.log(`Erro: ${thrownError}`);
+					}
+				});
 			},
 			buscaEmpregado: id => {
 				let busca = JSON.stringify(id);
@@ -154,26 +160,29 @@ $(() => {
 				const $target = $('#addEmployeeModal');
 				const $addForm = $('#addForm');
 				let empregados = $addForm.serializeArray();
-				let data = {};
+				let formData = {};
 
 				$(empregados).each((i, obj) => {
-					data[obj.name] = obj.value;
+					formData[obj.name] = obj.value;
 				});
 
-				axios
-					.post(Main.cache.server + 'inserir.php', data)
-					.then(response => {
-						if (response.status === 200) {
-							$target.modal('toggle');
-							Main.functions.listarEmpregados();
-							$addForm.each(function() {
-								this.reset();
-							});
-						}
-					})
-					.catch(function(error) {
-						console.log('Erro na Requisição: ' + error);
-					});
+				$.ajax({
+					type: 'POST',
+					url: Main.cache.server + 'inserir.php',
+					data: JSON.stringify(formData),
+					contentType: 'application/json; charset=utf-8;',
+					success: () => {
+						$target.modal('toggle');
+						Main.functions.listarEmpregados();
+						$addForm.each(function() {
+							this.reset();
+						});
+					},
+					error: (xhr, thrownError) => {
+						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
+						console.log(`Erro: ${thrownError}`);
+					}
+				});
 			}
 		}
 	};

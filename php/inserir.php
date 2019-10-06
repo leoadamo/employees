@@ -1,8 +1,7 @@
 <?php
   header('Access-Control-Allow-Methods: *');
   header('Access-Control-Allow-Origin: *');
-  header('Content-type:application/json');
-
+ 
   include('conecta.php');
 
   $json = file_get_contents('php://input');
