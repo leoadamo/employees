@@ -104,6 +104,11 @@ $(() => {
 					dataType: 'json',
 					success: response => {
 						Main.functions.modalEdita(response);
+						$('#updtForm').on('click', '.update-employee', function(e) {
+							e.preventDefault();
+							let key = $(this).data('id');
+							Main.functions.atualizaEmpregados(key);
+						});
 					},
 					error: (xhr, thrownError) => {
 						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
@@ -112,39 +117,40 @@ $(() => {
 				});
 			},
 			modalEdita: response => {
-				let $target = $('#editEmployeeModal');
+				const $target = $('#editEmployeeModal');
 				let html = [];
 
 				$.each(response, (i, element) => {
 					html.push(
 						`<div class="modal-dialog">
 							<div class="modal-content">
-								<form class="form">
+								<form id="updtForm">
 									<div class="modal-header">
 										<h4 class="modal-title">Editar Empregado</h4>
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 									</div>
 									<div class="modal-body">
+										<input type="hidden" name="id" value="${element.id}" />
 										<div class="form-group">
 											<label>Nome</label>
-											<input type="text" class="form-control" required value="${element.nome}" />
+											<input type="text" class="form-control" name="nome" required value="${element.nome}" />
 										</div>
 										<div class="form-group">
 											<label>Email</label>
-											<input type="email" class="form-control" required value="${element.email}"/>
+											<input type="email" class="form-control" name="email" required value="${element.email}"/>
 										</div>
 										<div class="form-group">
 											<label>Endereço</label>
-											<input class="form-control" required value="${element.endereco}" />
+											<input class="form-control" name="endereco" required value="${element.endereco}" />
 										</div>
 										<div class="form-group">
 											<label>Telefone</label>
-											<input type="text" class="form-control" required value="${element.telefone}"/>
+											<input type="text" class="form-control" name="telefone" required value="${element.telefone}"/>
 										</div>
 									</div>
 									<div class="modal-footer">
 										<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar" />
-										<input type="submit" class="btn btn-info" value="Salvar" />
+										<input type="submit" class="btn btn-info update-employee" value="Salvar" />
 									</div>
 								</form>
 							</div>
@@ -153,14 +159,42 @@ $(() => {
 					$target.html(html);
 				});
 			},
+			atualizaEmpregados: () => {
+				const $target = $('#editEmployeeModal');
+				const $updateForm = $('#updtForm');
+				let values = $updateForm.serializeArray();
+				let formData = {};
+
+				$(values).each((i, obj) => {
+					formData[obj.name] = obj.value;
+				});
+
+				$.ajax({
+					type: 'POST',
+					url: Main.cache.server + 'editar.php',
+					data: JSON.stringify(formData),
+					contentType: 'application/json; charset=utf-8;',
+					success: () => {
+						$target.modal('toggle');
+						Main.functions.listarEmpregados();
+						$updateForm.each(function() {
+							this.reset();
+						});
+					},
+					error: (xhr, thrownError) => {
+						console.log(`Erro na Requisição:\nStatus: ${xhr.status}`);
+						console.log(`Erro: ${thrownError}`);
+					}
+				});
+			},
 			insereEmpregados: event => {
 				event.preventDefault();
 				const $target = $('#addEmployeeModal');
 				const $addForm = $('#addForm');
-				let empregados = $addForm.serializeArray();
+				let employees = $addForm.serializeArray();
 				let formData = {};
 
-				$(empregados).each((i, obj) => {
+				$(employees).each((i, obj) => {
 					formData[obj.name] = obj.value;
 				});
 
